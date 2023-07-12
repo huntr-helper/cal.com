@@ -1,3 +1,4 @@
+import { useOrgBrandingValues } from "ee/organizations/hooks";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -193,7 +194,7 @@ const PendingMemberItem = (props: { member: TeamMember; index: number; teamId: n
   const { member, index, teamId } = props;
   const { t } = useLocale();
   const utils = trpc.useContext();
-
+  const orgBranding = useOrgBrandingValues();
   const removeMemberMutation = trpc.viewer.teams.removeMember.useMutation({
     async onSuccess() {
       await utils.viewer.teams.get.invalidate();
@@ -214,7 +215,7 @@ const PendingMemberItem = (props: { member: TeamMember; index: number; teamId: n
         <Avatar
           gravatarFallbackMd5="teamMember"
           size="mdLg"
-          imageSrc={WEBAPP_URL + "/" + member.username + "/avatar.png"}
+          imageSrc={(orgBranding?.fullDomain ?? WEBAPP_URL) + "/" + member.username + "/avatar.png"}
           alt="owner-avatar"
         />
         <div>

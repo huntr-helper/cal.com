@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { Suspense } from "react";
 
+import { useOrgBrandingValues } from "@calcom/features/ee/organizations/hooks";
 import { APP_NAME, WEBAPP_URL } from "@calcom/lib/constants";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { trpc } from "@calcom/trpc/react";
@@ -54,6 +55,7 @@ const WebhooksList = ({ webhooksByViewer }: { webhooksByViewer: WebhooksByViewer
   const router = useRouter();
 
   const { profiles, webhookGroups } = webhooksByViewer;
+  const orgBranding = useOrgBrandingValues();
 
   const hasTeams = profiles && profiles.length > 1;
 
@@ -69,7 +71,10 @@ const WebhooksList = ({ webhooksByViewer }: { webhooksByViewer: WebhooksByViewer
                     <div className="items-centers flex ">
                       <Avatar
                         alt={group.profile.image || ""}
-                        imageSrc={group.profile.image || `${WEBAPP_URL}/${group.profile.name}/avatar.png`}
+                        imageSrc={
+                          group.profile.image ||
+                          `${orgBranding?.fullDomain ?? WEBAPP_URL}/${group.profile.name}/avatar.png`
+                        }
                         size="md"
                         className="inline-flex justify-center"
                       />

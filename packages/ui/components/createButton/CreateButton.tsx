@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 
+import { useOrgBrandingValues } from "@calcom/features/ee/organizations/hooks";
 import { WEBAPP_URL } from "@calcom/lib/constants";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import {
@@ -38,6 +39,8 @@ export type CreateBtnProps = {
 export function CreateButton(props: CreateBtnProps) {
   const { t } = useLocale();
   const router = useRouter();
+  const orgBranding = useOrgBrandingValues();
+
   const {
     createDialog,
     options,
@@ -113,7 +116,9 @@ export function CreateButton(props: CreateBtnProps) {
                   StartIcon={(props) => (
                     <Avatar
                       alt={option.label || ""}
-                      imageSrc={option.image || `${WEBAPP_URL}/${option.label}/avatar.png`} // if no image, use default avatar
+                      imageSrc={
+                        option.image || `${orgBranding?.fullDomain ?? WEBAPP_URL}/${option.label}/avatar.png`
+                      } // if no image, use default avatar
                       size="sm"
                       {...props}
                     />
